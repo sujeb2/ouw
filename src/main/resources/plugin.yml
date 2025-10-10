@@ -1,0 +1,7 @@
+name: ouw
+version: '1.0-SNAPSHOT'
+main: com.songro.ouw.Ouw
+api-version: '1.21'
+authors: [ notSongro_ ]
+description:
+  δύω (duo): greek word meaning duo
