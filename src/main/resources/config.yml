@@ -1,0 +1,13 @@
+# DO NOT TOUCH THE "worlds" section!!
+# It auto generates it self.
+
+# Config description
+## ignore_spawn_warn: Skips warning message when setups default world spawn.
+## return_debug_info: Sends debugging information message to startup player.
+
+ignore_spawn_warn: false
+return_debug_info: false
+
+
+
+worlds:
