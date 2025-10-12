@@ -10,3 +10,6 @@ commands:
   setup:
     usage: /<command> <Player1Location_x> <Player1Location_y> <Player1Location_z> <Player2Location_x> <Player2Location_y> <Player2Location_z> <CopyGameRule?> <CopyDefaultSpawn?>
     description: Setup duel world
+  kitsetup:
+    usage: /<command> <CopyInventoryArmor?>
+    description: Setup duel kit

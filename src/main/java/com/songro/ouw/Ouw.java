@@ -2,6 +2,7 @@ package com.songro.ouw;
 
 import com.destroystokyo.paper.utils.PaperPluginLogger;
 import com.songro.ouw.command.SetupDuel;
+import com.songro.ouw.command.SetupDuelKit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,6 +20,8 @@ public final class Ouw extends JavaPlugin {
 
     public File config_file;
     private FileConfiguration config_data;
+    public File kit_file;
+    private FileConfiguration kit_data;
 
     @Override
     public void onEnable() {
@@ -28,6 +31,7 @@ public final class Ouw extends JavaPlugin {
             initConfig();
 
             Objects.requireNonNull(getCommand("setup")).setExecutor(new SetupDuel());
+            Objects.requireNonNull(getCommand("kitsetup")).setExecutor(new SetupDuelKit());
         } catch (Exception e) {
             log.severe("Something really bad happened while running initial startup.");
             log.severe(e.getLocalizedMessage());
@@ -40,7 +44,7 @@ public final class Ouw extends JavaPlugin {
     }
 
     public void initConfig() {
-        config_file = new File(getDataFolder(), "pldata.yml");
+        config_file = new File(getDataFolder(), "config.yml");
         if (!config_file.exists()) {
             log.warning("Initializing data.");
             config_file.getParentFile().mkdirs();
@@ -60,6 +64,30 @@ public final class Ouw extends JavaPlugin {
     }
 
     public FileConfiguration getConfigData() {
+        return config_data;
+    }
+
+    public void initKitData() {
+        kit_file = new File(getDataFolder(), "kit.yml");
+        if (!kit_file.exists()) {
+            log.warning("Initializing data.");
+            kit_file.getParentFile().mkdirs();
+            saveResource("kit.yml", false);
+            log.info("Initialized");
+        } else {
+            log.info("Found.");
+        }
+
+        kit_data = new YamlConfiguration();
+        try {
+            kit_data.load(kit_file);
+        } catch (IOException | InvalidConfigurationException e) {
+            log.severe("Failed to load kit data! Is File valid?");
+            plugin.setEnabled(false);
+        }
+    }
+
+    public FileConfiguration getKitData() {
         return config_data;
     }
 }
