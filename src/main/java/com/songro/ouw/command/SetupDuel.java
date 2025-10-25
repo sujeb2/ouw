@@ -23,12 +23,13 @@ public class SetupDuel implements CommandExecutor {
         plugin = Ouw.plugin;
         FileConfiguration config = Ouw.plugin.getConfigData();
         Player p = (Player) commandSender;
-        if(args.length != 8) {
+        if(args.length != 9) {
             p.sendMessage(Component.text("Invalid command usage").color(NamedTextColor.YELLOW));
             return false;
         }
 
         boolean ignoreSpawnWarning = Ouw.plugin.getConfigData().getBoolean("ignore_spawn_warn");
+        boolean keepWorldBorder = Boolean.parseBoolean(args[8]);
         boolean copyDefaultSpawn = Boolean.parseBoolean(args[7]);
         boolean copyWorldGameRule = Boolean.parseBoolean(args[6]);
         Location player_1_spawn = new Location(p.getWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
@@ -45,6 +46,7 @@ public class SetupDuel implements CommandExecutor {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             if(copyDefaultSpawn) config.set("worlds." + world.getName() + ".copyDefaultSpawn", copyDefaultSpawn);
             if(copyWorldGameRule) config.set("worlds." + world.getName() + ".copyWorldGameRule", copyWorldGameRule);
+            if(keepWorldBorder) config.set("worlds." + world.getName() + ".keepWorldBorder", keepWorldBorder);
             config.set("worlds." + world.getName() + ".player1_spawn", player_1_spawn);
             config.set("worlds." + world.getName() + ".player2_spawn", player_2_spawn);
 
