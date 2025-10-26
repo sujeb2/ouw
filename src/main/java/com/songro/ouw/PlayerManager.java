@@ -22,4 +22,6 @@ public class PlayerManager {
         return Ouw.plugin.getConfigData().getString(p.getUniqueId() + ".currentMap");
     }
 
+
+
 }

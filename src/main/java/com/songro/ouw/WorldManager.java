@@ -1,5 +1,6 @@
 package com.songro.ouw;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mvplugins.multiverse.core.MultiverseCoreApi;
 import org.mvplugins.multiverse.core.world.LoadedMultiverseWorld;
 import org.mvplugins.multiverse.core.world.options.CloneWorldOptions;
+import org.mvplugins.multiverse.core.world.options.RemoveWorldOptions;
 import org.mvplugins.multiverse.external.jvnet.hk2.annotations.Optional;
 
 import java.util.List;
@@ -68,9 +70,36 @@ public class WorldManager {
         return future;
     }
 
+    public CompletableFuture<Boolean> removeWorld(@NotNull String worldName, @NotNull Boolean force_remove) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        if(!force_remove && Bukkit.getWorld(worldName).getPlayerCount() > 0) {
+            log.warning("Cannot remove world because players are still logged in that world!");
+            future.complete(false);
+            return future;
+        }
+
+        worldManager.getWorld(worldName).peek(world -> {
+           worldManager.removeWorld(RemoveWorldOptions.world(world))
+                   .onSuccess(success -> {
+                       log.info("Successfully removed world: " + world.getName());
+                       future.complete(true);
+                   })
+                   .onFailure(failed -> {
+                       log.severe("Failed to remove world: " + world.getName());
+                       log.warning("Reason: " + failed);
+                       future.complete(false);
+                   });
+        }).onEmpty(() -> {
+            log.warning("Invalid world name.");
+            future.complete(false);
+        });
+
+        return future;
+    }
+
     public CompletableFuture<Boolean> teleport(@NotNull Player p, @Optional List<Player> pList) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        if(p.isEmpty()) {
+        if(!p.isOnline()) {
             log.severe("Invalid Player profile.");
             future.complete(false);
             return future;
