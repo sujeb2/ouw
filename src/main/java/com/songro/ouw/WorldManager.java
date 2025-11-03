@@ -97,13 +97,28 @@ public class WorldManager {
         return future;
     }
 
-    public CompletableFuture<Boolean> teleport(@NotNull Player p, @Optional List<Player> pList) {
+    public CompletableFuture<Boolean> teleport(@NotNull Player p, @Optional List<Player> pList, @NotNull String to_where) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         if(!p.isOnline()) {
             log.severe("Invalid Player profile.");
             future.complete(false);
             return future;
         }
+
+        worldManager.getWorld(to_where).peek(world -> {
+           if(!pList.isEmpty()) {
+               for(Player t : pList) {
+                   t.teleport(world.getSpawnLocation());
+               }
+               future.complete(true);
+           } else {
+               p.teleport(world.getSpawnLocation());
+           }
+           future.complete(true);
+        }).onEmpty(() -> {
+            log.severe("Invalid world name.");
+            future.complete(false);
+        });
 
         return future;
     }

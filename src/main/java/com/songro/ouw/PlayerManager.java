@@ -1,6 +1,8 @@
 package com.songro.ouw;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerManager {
 
@@ -22,6 +24,12 @@ public class PlayerManager {
         return Ouw.plugin.getConfigData().getString(p.getUniqueId() + ".currentMap");
     }
 
+    public void initPlayerData() {
+        if(!Ouw.plugin.getConfigData().contains(p.getUniqueId().toString())) {
+            Ouw.log.info("Initializing player data for " + p.getName());
 
-
+        } else {
+            Ouw.log.warning("Player data has already initialized.");
+        }
+    }
 }
