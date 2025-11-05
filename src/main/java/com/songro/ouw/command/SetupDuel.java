@@ -32,6 +32,8 @@ public class SetupDuel implements CommandExecutor {
         boolean keepWorldBorder = Boolean.parseBoolean(args[8]);
         boolean copyDefaultSpawn = Boolean.parseBoolean(args[7]);
         boolean copyWorldGameRule = Boolean.parseBoolean(args[6]);
+        //boolean setMaxPlayers = Boolean.parseBoolean(args[9]); // seriously, is this setting worth to make?
+
         Location player_1_spawn = new Location(p.getWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
         Location player_2_spawn = new Location(p.getWorld(), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]));
         World world = p.getWorld();

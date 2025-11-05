@@ -12,6 +12,7 @@ import org.mvplugins.multiverse.core.world.options.RemoveWorldOptions;
 import org.mvplugins.multiverse.external.jvnet.hk2.annotations.Optional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -27,7 +28,7 @@ public class WorldManager {
         log = Ouw.log;
     }
 
-    public CompletableFuture<Boolean> generateTempMap(@NotNull String templateWorldName, @NotNull final String UUID) {
+    public CompletableFuture<Boolean> generateTempMap(@NotNull String templateWorldName, @NotNull final String uuid) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         if(templateWorldName.isEmpty() || !Ouw.plugin.getConfigData().contains("worlds." + templateWorldName)) {
             log.severe("Invalid world name or, un-initialized world name has been checked.");
@@ -35,14 +36,14 @@ public class WorldManager {
             future.complete(false);
             return future;
         }
-        if(UUID.isBlank()) {
+        if(uuid.isBlank()) {
             log.severe("Invalid UUID has been found.");
             log.warning("Stopping cloning process..");
             future.complete(false);
             return future;
         }
 
-        final String newWorldName = templateWorldName + "_" + UUID;
+        final String newWorldName = templateWorldName + uuid;
         boolean keepGameRule = Ouw.plugin.getConfigData().getBoolean("worlds." + templateWorldName + ".copyWorldGameRule");
         boolean keepWorldBorder = Ouw.plugin.getConfigData().getBoolean("worlds." + templateWorldName + ".keepWorldBorder");
         boolean copyDefaultSpawn = Ouw.plugin.getConfigData().getBoolean("worlds." + templateWorldName + ".copyDefaultSpawn");
@@ -119,6 +120,19 @@ public class WorldManager {
             log.severe("Invalid world name.");
             future.complete(false);
         });
+
+        return future;
+    }
+
+    public CompletableFuture<Boolean> checkSafeLocation(@NotNull Location loc) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        if(loc.isBlock() || !loc.isWorldLoaded()) {
+            future.complete(false);
+            return future;
+        }
+
+        // todo: function name provides the information about this function,
+        //  jus make it as fast as possible my brother :sob:
 
         return future;
     }
